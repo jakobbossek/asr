@@ -1,13 +1,12 @@
 Package: asr
 Title: Algorithm Selection in R
-Description: Awesome algorithm selection/configuration toolbox in R
-by two guys from the University of Muenster.
+Description: Awesome algorithm selection/configuration toolbox in R by two guys from the University of Muenster.
 Version: 1.0.0
 Encoding: UTF-8
 Date: 2018-03-17
 Authors@R: c(
-    person("Jakob", "Bossek", email = "j.bossek@gmail.com", role = c("aut", "cre"))
-    person("Pascal", "Kerschke", email = "kerschke@uni-muenster.de", role = "aut")
+    person("Jakob", "Bossek", email = "j.bossek@gmail.com", role = c("aut", "cre")),
+    person("Pascal", "Kerschke", email = "kerschke@uni-muenster.de", role = "aut"))
 Maintainer: Jakob Bossek <j.bossek@gmail.com>
 License: GPL-3
 URL: https://github.com/jakobbossek/asr
