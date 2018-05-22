@@ -15,11 +15,13 @@ Depends:
     R (>= 2.10),
     BBmisc (>= 1.6)
 Imports:
-    checkmate (>= 1.1)
+    checkmate (>= 1.1),
+    parallelMap,
+    dplyr,
+    plyr
 Suggests:
     testthat (>= 0.9.1),
     rmarkdown
 ByteCompile: yes
 LazyData: yes
 RoxygenNote: 6.0.1
-VignetteBuilder: knitr

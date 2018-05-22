@@ -13,6 +13,10 @@
 #'   Default is 10, which is quite common in the literature on algorithm selection.
 #' @param p [\code{numeric(1)}]\cr
 #'   Quantile. Default is 0.5.
+#' @param score [\code{character(1)}]\cr
+#'   Name of score.
+#' @param ... [any]\cr
+#'   Arguments passed down to score functions.
 #' @return [\code{numeric(1)}] Performance value.
 #' @rdname performance_measures
 #' @name performance_measures
@@ -61,7 +65,7 @@ getPQRScore = function(times, cutoff = 3600, f = 10, p = 0.5, ...) {
   n.success = sum(times < cutoff)
   if (n.success < threshold)
     return(f * cutoff)
-  return(quantile(times, p = p, names = FALSE, ...))
+  return(stats::quantile(times, p = p, names = FALSE, ...))
 }
 
 #' @name performance_measures
@@ -101,6 +105,6 @@ getFailureRate = function(times, cutoff = 3600) {
 getRuntimeQuantile = function(times, cutoff = 3600, p = 0.5, ...) {
   times = times[times < cutoff]
   if (length(times) > 0L)
-    return(quantile(times, p = p, names = FALSE, ...))
+    return(stats::quantile(times, p = p, names = FALSE, ...))
   return(cutoff)
 }
