@@ -81,9 +81,9 @@ getPERTScore = function(times, cutoff = 3600, f = 1, ...) {
   a = b = 0
   if (s == 0)
     return(m * f * cutoff)
-  ps = s / m
-  a = mean(times[idx.in.time])
-  b = ((1 - ps) / ps) * f * T
+  ps = mean(times < cutoff)
+  a = mean(times[times < cutoff])
+  b = ((1 - ps) / ps) * f * cutoff
   return(a + b)
 }
 
@@ -103,8 +103,29 @@ getFailureRate = function(times, cutoff = 3600) {
 #' @export
 #FIXME: do we need this?
 getRuntimeQuantile = function(times, cutoff = 3600, p = 0.5, ...) {
+  checkmate::assertNumeric(times, lower = 0, any.missing = FALSE, all.missing = FALSE)
+  checkmate::assertNumber(cutoff, lower = 1)
+  checkmate::assertNumber(p, lower = 0, upper = 1)
+
   times = times[times < cutoff]
   if (length(times) > 0L)
     return(stats::quantile(times, p = p, names = FALSE, ...))
   return(cutoff)
+}
+
+#' @name performance_measures
+#' @export
+#FIXME: generalize -> makeHVMeasure(...) where ... contains scalar goals
+getHVScore = function(times, cutoff = 3600, p = 0.5, normalize = FALSE, ...) {
+  checkmate::assertNumeric(times, lower = 0, any.missing = FALSE, all.missing = FALSE)
+  checkmate::assertNumber(cutoff, lower = 1)
+  checkmate::assertNumber(p, lower = 0, upper = 1)
+  checkmate::assertFlag(normalize)
+
+  pf = getFailureRate(times, cutoff = cutoff, ...)
+  rt = getRuntimeQuantile(times, cutoff = cutoff, ...)
+  hv.score = (1 - pf) * (cutoff - rt)
+  if (normalize)
+    return(hv.score / cutoff)
+  return(hv.score)
 }
