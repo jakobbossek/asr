@@ -4,7 +4,7 @@
 #' of algorithm selection in both the continuous and discrete domains.
 #'
 #' @param times [\code{numeric}]\cr
-#'   Running times of algorithm runs.
+#'   Vector of running times of algorithm runs.
 #' @param cutoff [\code{numeric(1)}]\cr
 #'   Cutoff time for algorithm runs in seconds. Runs with running times exceeding
 #'   the cutoff time are categorized as failed. Default is 1 hour.
@@ -17,7 +17,7 @@
 #'   Name of score.
 #' @param ... [any]\cr
 #'   Arguments passed down to score functions.
-#' @return [\code{numeric(1)}] Performance value.
+#' @return [\code{numeric(1)}] Scalar performance value.
 #' @rdname performance_measures
 #' @name performance_measures
 #' @export
