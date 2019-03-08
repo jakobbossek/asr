@@ -113,6 +113,13 @@ getRuntimeQuantile = function(times, cutoff = 3600, p = 0.5, ...) {
   return(cutoff)
 }
 
+getMeanRuntime = function(times, cutoff = 3600, ...) {
+  times = times[times < cutoff]
+  if (length(times) > 0L)
+    return(mean(times))
+  return(cutoff)
+}
+
 #' @name performance_measures
 #' @export
 #FIXME: generalize -> makeHVMeasure(...) where ... contains scalar goals
