@@ -18,10 +18,11 @@ Imports:
     checkmate (>= 1.1),
     parallelMap,
     dplyr,
-    plyr
+    plyr,
+    ggplot2
 Suggests:
     testthat (>= 0.9.1),
     rmarkdown
 ByteCompile: yes
 LazyData: yes
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1

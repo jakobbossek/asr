@@ -1,36 +1,29 @@
-# Pairwise scatterplots of performance values
-plotScatter = function(df, value.var = "PAR10", algo.a, algo.b, gg.colour = "group", gg.shape = "group") {
-  dd = df[df$solver %in% c(algo.a, algo.b), , drop = FALSE]
-  dd = reshape2::dcast(dd, group + size + prob ~ solver, value.var = value.var)
-
-  pl = ggplot2::ggplot(dd)
-  pl = pl + ggplot2::geom_abline(slope = 1, intercept = 0, linetype = "solid", colour = "gray20", size = 1.3)
-  pl = pl + ggplot2::geom_hline(yintercept = c(3600, 36000), linetype = "dashed", colour = "gray40")
-  pl = pl + ggplot2::geom_vline(xintercept = c(3600, 36000), linetype = "dashed", colour = "gray40")
-  pl = pl + ggplot2::geom_point(ggplot2::aes_string(x = algo.a, y = algo.b, colour = gg.colour, shape = gg.shape), size = 2)
-  n.shapes = length(unique(dd[[gg.shape]]))
+#Bi-obj. (RTS, PF)->min! measure
+#FIXME: needs generalization
+plotBiobjectiveScatter = function(df, x.value.var, y.value.var, xlim = NULL, ylim = NULL, gg.colour = "group", gg.shape = "group") {
+  pl = ggplot2::ggplot(df)
+  pl = pl + geom_point(aes_string(x = x.value.var, y = y.value.var, color = gg.colour, shape = gg.shape))
+  n.shapes = length(unique(df[[gg.shape]]))
+  pl = pl + ggplot2::scale_shape_manual(values = c(0, 1, 5, 6, 16, 17, 18)[seq_len(n.shapes)])
+  pl = pl + ggplot2::scale_y_continuous(
+    breaks = seq(0, 1, by = 0.2),
+    labels = as.character(seq(0, 1, by = 0.2)))
+#    limits = c(-0.1, 1.2))
   pl = pl + ggplot2::scale_x_log10(
-    breaks = c(0, 1, 10, 100, 1000, 3600, 36000),
-    labels = c("0", "1", "10", "100", "1000", "T = 3600", "10 x T"),
-    limits = c(0.5, 36000))
-  pl = pl + ggplot2::scale_y_log10(
-    breaks = c(0, 1, 10, 100, 1000, 3600, 36000),
-    labels = c("0", "1", "10", "100", "1000", "T = 3600", "10 x T"),
-    limits = c(0.5, 36000))
-  pl = pl + ggplot2::scale_shape_manual(values = c(0, 1, 5, 6)[seq_len(n.shapes)])
+    breaks = c(0, 1, 10, 100, 1000, 3600),
+    labels = c("0", "1", "10", "100", "1000", "T = 3600"),
+    limits = c(0.5, 3650))
   pl = pl + theme_bw()
   pl = pl + viridis::scale_colour_viridis(discrete = TRUE, end = 0.75)
-  #pl = pl + ggplot2::scale_colour_grey(end = 0.7)
+  pl = pl + ggplot2::theme(legend.position = "top")
+  pl = pl + ggplot2::guides(color = guide_legend(nrow = 2L), shape = guide_legend(nrow = 2L))
   pl = pl + labs(
-    x = sprintf("Runtime (%s) of solver %s\n[in s; log-scaled] ", value.var, algo.a),
-    y = sprintf("Runtime (%s) of solver %s\n[in s; log-scaled] ", value.var, algo.b),
+    x = "Running time of successful runs [in s; log-scaled]",
+    y = "Fraction of failed runs",
     shape = tools::toTitleCase(gg.shape),
     colour = tools::toTitleCase(gg.colour))
-  pl = pl + ggplot2::theme(legend.position = "top", axis.text.x = element_text(hjust = 1, angle = 45))
-  pl = pl + ggplot2::guides(color = guide_legend(nrow = 2L), shape = guide_legend(nrow = 2L))
-  #pl = pl + ggplot2::facet_grid(. ~ size)
-#  print(pl)
-  return(pl)
+  pl = pl + facet_grid(. ~ solver)
+  pl
 }
 
 # Pairwise scatterplots of feature values
@@ -64,7 +57,7 @@ plotFeatScatter = function(df,
       colour = tools::toTitleCase(gg.colour))
     pl = pl + theme_bw()
     pl = pl + theme(legend.position = "top")
-    pl = pl + ggplot2::scale_shape_manual(values = c(0, 1, 5, 6)[seq_len(n.shapes)])
+    pl = pl + ggplot2::scale_shape_manual(values = c(0, 1, 5, 6, 16, 17, 18)[seq_len(n.shapes)])
     pl = pl + viridis::scale_colour_viridis(discrete = discrete.colour, end = 0.75)
     if (!is.null(facet.args))
       pl = pl + do.call(ggplot2::facet_wrap, facet.args)
